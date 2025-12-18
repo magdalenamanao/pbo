@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Login LocalStorage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-500 to-purple-600 min-h-screen flex items-center justify-center p-4">
+
+    <div id="app" class="w-full max-w-md">
+        
+        <div id="loginSection" class="glass p-8 rounded-2xl shadow-2xl">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">Selamat Datang</h1>
+                <p class="text-gray-500 mt-2">Silakan masuk ke akun Anda</p>
+            </div>
+
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" id="username" required
+                        class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none transition"
+                        placeholder="Masukkan nama (magda/serlin/martin)">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" required
+                        class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none transition"
+                        placeholder="••••••••">
+                    <p class="text-xs text-gray-400 mt-1">*Gunakan password: 123</p>
+                </div>
+                <button type="submit" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-300 transform hover:scale-[1.02]">
+                    Login Sekarang
+                </button>
+            </form>
+        </div>
+
+        <div id="dashboardSection" class="hidden glass p-8 rounded-2xl shadow-2xl text-center">
+            <div class="mb-6">
+                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span id="userInitial" class="text-3xl font-bold text-blue-600">U</span>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Hai, <span id="displayName" class="text-blue-600">User</span>!</h2>
+                <p class="text-gray-500 mt-1">Anda berhasil masuk ke sistem.</p>
+            </div>
+            
+            <div class="bg-gray-50 rounded-xl p-4 mb-6 text-left">
+                <p class="text-sm text-gray-600"><strong>Status:</strong> Aktif</p>
+                <p class="text-sm text-gray-600"><strong>Role:</strong> Pengguna Terdaftar</p>
+            </div>
+
+            <button onclick="logout()" 
+                class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition">
+                Keluar
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. Inisialisasi Database di LocalStorage (JSON)
+        const initialUsers = [
+            { username: "magda", password: "123", name: "Magda" },
+            { username: "serlin", password: "123", name: "Serlin" },
+            { username: "martin", password: "123", name: "Martin" }
+        ];
+
+        // Jalankan saat aplikasi pertama kali dimuat
+        function initDB() {
+            if (!localStorage.getItem('users')) {
+                localStorage.setItem('users', JSON.stringify(initialUsers));
+                console.log("Database diinisialisasi.");
+            }
+        }
+
+        // 2. Logika Login
+        const loginForm = document.getElementById('loginForm');
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const userInp = document.getElementById('username').value.toLowerCase();
+            const passInp = document.getElementById('password').value;
+
+            // Ambil data dari LocalStorage
+            const users = JSON.parse(localStorage.getItem('users'));
+
+            // Cari user yang cocok
+            const foundUser = users.find(u => u.username === userInp && u.password === passInp);
+
+            if (foundUser) {
+                showDashboard(foundUser.name);
+            } else {
+                alert("Gagal Login! Username atau Password salah.");
+            }
+        });
+
+        // 3. Tampilan Dashboard
+        function showDashboard(name) {
+            loginSection.classList.add('hidden');
+            dashboardSection.classList.remove('hidden');
+            
+            document.getElementById('displayName').innerText = name;
+            document.getElementById('userInitial').innerText = name.charAt(0).toUpperCase();
+        }
+
+        // 4. Logika Logout
+        function logout() {
+            loginSection.classList.remove('hidden');
+            dashboardSection.classList.add('hidden');
+            loginForm.reset();
+        }
+
+        // Jalankan init
+        initDB();
+    </script>
+</body>
+</html>
