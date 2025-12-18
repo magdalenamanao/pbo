@@ -3,129 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Login LocalStorage</title>
+    <title>Nature Login - Local Storage</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
         .glass {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-500 to-purple-600 min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <div id="app" class="w-full max-w-md">
+    <div id="mainContainer" class="w-full max-w-md">
         
-        <div id="loginSection" class="glass p-8 rounded-2xl shadow-2xl">
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-800">Selamat Datang</h1>
-                <p class="text-gray-500 mt-2">Silakan masuk ke akun Anda</p>
+        <div id="loginSection" class="glass rounded-3xl p-8 shadow-2xl text-white">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-bold tracking-tight">Selamat Datang</h1>
+                <p class="text-sm opacity-80 mt-2">Jelajahi keindahan hari ini</p>
             </div>
 
-            <form id="loginForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Username</label>
+            <form id="loginForm" class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-sm font-medium ml-1">Username</label>
                     <input type="text" id="username" required
-                        class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none transition"
-                        placeholder="Masukkan nama (magda/serlin/martin)">
+                        class="w-full bg-white/20 border border-white/30 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-green-400 transition placeholder:text-white/50"
+                        placeholder="magda / serlin / martin">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="password" required
-                        class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none transition"
-                        placeholder="••••••••">
-                    <p class="text-xs text-gray-400 mt-1">*Gunakan password: 123</p>
+
+                <div class="space-y-2 relative">
+                    <label class="text-sm font-medium ml-1">Password</label>
+                    <div class="relative">
+                        <input type="password" id="password" required
+                            class="w-full bg-white/20 border border-white/30 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-green-400 transition placeholder:text-white/50"
+                            placeholder="••••••••">
+                        <button type="button" onclick="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 opacity-70 hover:opacity-100 transition">
+                            <i data-lucide="eye" id="eyeIcon" class="w-5 h-5"></i>
+                        </button>
+                    </div>
                 </div>
+
                 <button type="submit" 
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-300 transform hover:scale-[1.02]">
-                    Login Sekarang
+                    class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-95">
+                    LOGIN
                 </button>
             </form>
         </div>
 
-        <div id="dashboardSection" class="hidden glass p-8 rounded-2xl shadow-2xl text-center">
-            <div class="mb-6">
-                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span id="userInitial" class="text-3xl font-bold text-blue-600">U</span>
+        <div id="userSection" class="hidden glass rounded-3xl p-10 shadow-2xl text-white text-center">
+            <div class="mb-6 flex justify-center">
+                <div class="p-4 bg-white/20 rounded-full">
+                    <i data-lucide="user" class="w-12 h-12"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800">Hai, <span id="displayName" class="text-blue-600">User</span>!</h2>
-                <p class="text-gray-500 mt-1">Anda berhasil masuk ke sistem.</p>
             </div>
+            <h1 class="text-4xl font-bold mb-2">Hai, <span id="userNameDisplay">User</span>!</h1>
+            <p class="text-lg opacity-90 mb-8">Senang melihatmu kembali di alam bebas.</p>
             
-            <div class="bg-gray-50 rounded-xl p-4 mb-6 text-left">
-                <p class="text-sm text-gray-600"><strong>Status:</strong> Aktif</p>
-                <p class="text-sm text-gray-600"><strong>Role:</strong> Pengguna Terdaftar</p>
+            <div class="bg-white/10 p-4 rounded-2xl text-sm mb-8 border border-white/10">
+                <p>Status: <span class="text-green-300 font-bold">Online</span></p>
+                <p>Lokasi: Indonesia</p>
             </div>
 
             <button onclick="logout()" 
-                class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition">
-                Keluar
+                class="w-full bg-white/20 hover:bg-red-500/50 border border-white/30 py-3 rounded-xl transition duration-300 font-semibold">
+                LOGOUT
             </button>
         </div>
 
     </div>
 
     <script>
-        // 1. Inisialisasi Database di LocalStorage (JSON)
+        // 1. Data User dalam format JSON (Disimpan ke Local Storage)
         const initialUsers = [
-            { username: "magda", password: "123", name: "Magda" },
-            { username: "serlin", password: "123", name: "Serlin" },
-            { username: "martin", password: "123", name: "Martin" }
+            { id: 1, username: "magda", password: "123", fullName: "Magda" },
+            { id: 2, username: "serlin", password: "123", fullName: "Serlin" },
+            { id: 3, username: "martin", password: "123", fullName: "Martin" }
         ];
 
-        // Jalankan saat aplikasi pertama kali dimuat
+        // Inisialisasi Database
         function initDB() {
-            if (!localStorage.getItem('users')) {
-                localStorage.setItem('users', JSON.stringify(initialUsers));
-                console.log("Database diinisialisasi.");
+            if (!localStorage.getItem('userDB')) {
+                localStorage.setItem('userDB', JSON.stringify(initialUsers));
             }
         }
 
-        // 2. Logika Login
+        // 2. Fungsi Login
         const loginForm = document.getElementById('loginForm');
-        const loginSection = document.getElementById('loginSection');
-        const dashboardSection = document.getElementById('dashboardSection');
-
+        
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            
+            const userVal = document.getElementById('username').value.trim().toLowerCase();
+            const passVal = document.getElementById('password').value;
 
-            const userInp = document.getElementById('username').value.toLowerCase();
-            const passInp = document.getElementById('password').value;
+            // Ambil data dari local storage
+            const users = JSON.parse(localStorage.getItem('userDB'));
+            
+            // Cari kecocokan
+            const userFound = users.find(u => u.username === userVal && u.password === passVal);
 
-            // Ambil data dari LocalStorage
-            const users = JSON.parse(localStorage.getItem('users'));
-
-            // Cari user yang cocok
-            const foundUser = users.find(u => u.username === userInp && u.password === passInp);
-
-            if (foundUser) {
-                showDashboard(foundUser.name);
+            if (userFound) {
+                renderUserPage(userFound.fullName);
             } else {
-                alert("Gagal Login! Username atau Password salah.");
+                alert("❌ GAGAL LOGIN!\nUsername atau password tidak ditemukan.");
             }
         });
 
-        // 3. Tampilan Dashboard
-        function showDashboard(name) {
-            loginSection.classList.add('hidden');
-            dashboardSection.classList.remove('hidden');
-            
-            document.getElementById('displayName').innerText = name;
-            document.getElementById('userInitial').innerText = name.charAt(0).toUpperCase();
+        // 3. Render Halaman User
+        function renderUserPage(name) {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('userSection').classList.remove('hidden');
+            document.getElementById('userNameDisplay').innerText = name;
+            lucide.createIcons(); // Re-render icons
         }
 
-        // 4. Logika Logout
+        // 4. Logout
         function logout() {
-            loginSection.classList.remove('hidden');
-            dashboardSection.classList.add('hidden');
+            document.getElementById('userSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
             loginForm.reset();
         }
 
-        // Jalankan init
+        // 5. Toggle Password Visibility
+        function togglePassword() {
+            const passInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                passInput.type = 'password';
+                eyeIcon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        // Jalankan saat load
         initDB();
+        lucide.createIcons();
     </script>
 </body>
 </html>
