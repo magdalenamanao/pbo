@@ -3,81 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Login LocalStorage</title>
+    <title>Nature Login System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --primary-color: #4a90e2;
-            --error-color: #e74c3c;
-            --bg-color: #f4f7f6;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
-        .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
         }
 
-        h2 { text-align: center; color: #333; }
-
-        .form-group { margin-bottom: 1rem; }
-
-        label { display: block; margin-bottom: 0.5rem; color: #666; }
-
-        input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: var(--primary-color);
+        .input-field {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
         }
 
-        button:hover { background-color: #357abd; }
-
-        #dashboard { display: none; text-align: center; }
-
-        .logout-btn {
-            background-color: var(--error-color);
-            margin-top: 1rem;
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #4ade80;
+            outline: none;
         }
 
-        .welcome-msg { font-size: 1.5rem; color: var(--primary-color); font-weight: bold; }
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex items-center justify-center p-6">
 
-    <div class="container">
-        <div id="login-page">
-            <h2>Masuk ke Aplikasi</h2>
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Masukkan username" required>
+    <div id="app" class="w-full max-w-md">
+        
+        <div id="loginFormContainer" class="glass-card p-10 shadow-2xl">
+            <div class="text-center mb-10">
+                <div class="inline-block p-3 bg-green-400/20 rounded-full mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input
+                <h1 class="text-3xl font-bold text-white">Selamat Datang</h1>
+                <p class="text-white/70 text-sm mt-2">Silakan login untuk melanjutkan</p>
+            </div>
+
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-white text-sm font-medium mb-2">Username</label>
+                    <input type="text" id="username" required 
+                        class="input-field w-full px-5 py-3 rounded-xl" 
+                        placeholder="magda / serlin / martin">
+                </div>
+
+                <div>
+                    <label class="block text-white text-sm font-medium mb-2">Password</label>
+                    <input type="password" id="password" required 
+                        class="input-field w-full px-5 py-3 rounded-xl" 
+                        placeholder="Masukkan password">
+                </div>
+
+                <button type="submit" 
+                    class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg transition duration-300 transform hover:scale-[1.02] active:scale-95">
+                    LOGIN
+                </button>
+            </form>
+        </div>
+
+        <div id="userDashboard" class="hidden glass-card p-12 shadow-2xl text-center text-white">
+            <div class="mb-6">
+                <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto border-2 border-white/50">
+                    <span id="initialAvatar" class="text-4xl font-bold">M</span>
+                </div>
+            </div>
+            <h2 class="text-3xl font-bold">Hai, <span id="userNameDisplay" class="text-green-300">User</span>!</h2>
+            <p class="mt-2 text-white/80">Selamat datang kembali di dashboard pribadi Anda.</p>
+            
+            <hr class="my-8 border-white/20">
+            
+            <button onclick="logout()" 
+                class="w-full bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold py-3 rounded-xl transition">
+                Logout
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        /**
+         * 1. DATABASE SETUP
+         * Menyimpan data user ke LocalStorage jika belum ada.
+         */
+        const usersData = [
+            { username: "magda", password: "123", name: "Magda" },
+            { username: "serlin", password: "123", name: "Serlin" },
+            { username: "martin", password: "123", name: "Martin" }
+        ];
+
+        function initDatabase() {
+            // Simpan data user dalam format JSON string
+            if (!localStorage.getItem('usersDB')) {
+                localStorage.setItem('usersDB', JSON.stringify(usersData));
+                console.log("Database diinisialisasi ke LocalStorage.");
+            }
+        }
+
+        /**
+         * 2. LOGIN LOGIC
+         */
+        const loginForm = document.getElementById('loginForm');
+        const loginSection = document.getElementById('loginFormContainer');
+        const dashboardSection = document.getElementById('userDashboard');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const userInp = document.getElementById('username').value.toLowerCase().trim();
+            const passInp = document.getElementById('password').value;
+
+            // Ambil data dari LocalStorage dan parse kembali ke Array
+            const db = JSON.parse(localStorage.getItem('usersDB'));
+
+            // Cari user
+            const foundUser = db.find(u => u.username === userInp && u.password === passInp);
+
+            if (foundUser) {
+                // Berhasil Login
+                showDashboard(foundUser.name);
+            } else {
+                // Gagal Login
+                alert("Gagal Login! Username atau Password salah.");
+            }
+        });
+
+        /**
+         * 3. UI NAVIGATION
+         */
+        function showDashboard(name) {
+            loginSection.classList.add('hidden');
+            dashboardSection.classList.remove('hidden');
+            
+            document.getElementById('userNameDisplay').innerText = name;
+            document.getElementById('initialAvatar').innerText = name.charAt(0);
+        }
+
+        function logout() {
+            dashboardSection.classList.add('hidden');
+            loginSection.classList.remove('hidden');
+            loginForm.reset();
+        }
+
+        // Jalankan Inisialisasi saat halaman dimuat
+        initDatabase();
+    </script>
+</body>
+</html>
