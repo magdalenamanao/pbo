@@ -3,167 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nature Login System</title>
+    <title>Nature Login - Admin System</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
         
         body {
             font-family: 'Poppins', sans-serif;
-            background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        .input-field {
-            background: rgba(255, 255, 255, 0.2);
+        .input-style {
+            background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
             transition: all 0.3s ease;
         }
 
-        .input-field:focus {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: #4ade80;
+        .input-style:focus {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #34d399; /* Emerald 400 */
             outline: none;
-        }
-
-        .input-field::placeholder {
-            color: rgba(255, 255, 255, 0.7);
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6">
+<body class="min-h-screen flex items-center justify-center p-4">
 
     <div id="app" class="w-full max-w-md">
         
-        <div id="loginFormContainer" class="glass-card p-10 shadow-2xl">
+        <div id="loginSection" class="glass rounded-[2rem] p-8 text-white transition-all duration-500 transform">
             <div class="text-center mb-10">
-                <div class="inline-block p-3 bg-green-400/20 rounded-full mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
+                <div class="bg-emerald-500/30 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-emerald-400/50">
+                    <i data-lucide="shield-check" class="w-8 h-8 text-emerald-400"></i>
                 </div>
-                <h1 class="text-3xl font-bold text-white">Selamat Datang</h1>
-                <p class="text-white/70 text-sm mt-2">Silakan login untuk melanjutkan</p>
+                <h1 class="text-3xl font-bold tracking-tight">Selamat Datang</h1>
+                <p class="text-sm opacity-70 mt-2">Gunakan admin1, admin2, atau admin3</p>
             </div>
 
             <form id="loginForm" class="space-y-6">
                 <div>
-                    <label class="block text-white text-sm font-medium mb-2">Username</label>
-                    <input type="text" id="username" required 
-                        class="input-field w-full px-5 py-3 rounded-xl" 
-                        placeholder="magda / serlin / martin">
+                    <label class="block text-xs font-semibold uppercase tracking-wider mb-2 ml-1">Username</label>
+                    <div class="relative">
+                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-300"></i>
+                        <input type="text" id="username" required
+                            class="input-style w-full pl-11 pr-4 py-3.5 rounded-xl text-sm placeholder:text-white/40"
+                            placeholder="Contoh: admin1">
+                    </div>
                 </div>
 
                 <div>
-                    <label class="block text-white text-sm font-medium mb-2">Password</label>
-                    <input type="password" id="password" required 
-                        class="input-field w-full px-5 py-3 rounded-xl" 
-                        placeholder="Masukkan password">
+                    <label class="block text-xs font-semibold uppercase tracking-wider mb-2 ml-1">Password</label>
+                    <div class="relative">
+                        <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-300"></i>
+                        <input type="password" id="password" required
+                            class="input-style w-full pl-11 pr-12 py-3.5 rounded-xl text-sm placeholder:text-white/40"
+                            placeholder="Masukkan password">
+                        <button type="button" onclick="togglePass()" class="absolute right-4 top-1/2 -translate-y-1/2 hover:text-emerald-300 transition">
+                            <i data-lucide="eye" id="eyeIcon" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <button type="submit" 
-                    class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg transition duration-300 transform hover:scale-[1.02] active:scale-95">
-                    LOGIN
+                    class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-emerald-900/20 transition-all duration-300 active:scale-95 flex items-center justify-center gap-2">
+                    LOGIN <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </form>
         </div>
 
-        <div id="userDashboard" class="hidden glass-card p-12 shadow-2xl text-center text-white">
-            <div class="mb-6">
-                <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto border-2 border-white/50">
-                    <span id="initialAvatar" class="text-4xl font-bold">M</span>
+        <div id="userSection" class="hidden glass rounded-[2rem] p-10 text-white text-center transform scale-95 transition-all duration-500">
+            <div class="relative w-24 h-24 mx-auto mb-6">
+                <div class="absolute inset-0 bg-emerald-400 blur-xl opacity-20 animate-pulse"></div>
+                <div class="relative bg-white/10 w-full h-full rounded-full border-2 border-emerald-400 flex items-center justify-center shadow-inner">
+                    <span id="avatarInitial" class="text-3xl font-bold text-emerald-400">A</span>
                 </div>
             </div>
-            <h2 class="text-3xl font-bold">Hai, <span id="userNameDisplay" class="text-green-300">User</span>!</h2>
-            <p class="mt-2 text-white/80">Selamat datang kembali di dashboard pribadi Anda.</p>
             
-            <hr class="my-8 border-white/20">
-            
-            <button onclick="logout()" 
-                class="w-full bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold py-3 rounded-xl transition">
-                Logout
-            </button>
+            <h1 class="text-3xl font-bold">Hai, <span id="displayName" class="text-emerald-400">User</span>!</h1>
+            <p class="text-white/60 mt-3 text-sm leading-relaxed">
+                Anda berhasil login ke sistem manajemen.<br>Nikmati hari Anda yang luar biasa.
+            </p>
+
+            <div class="mt-8 pt-8 border-t border-white/10 space-y-4">
+                <div class="bg-white/5 p-4 rounded-xl flex items-center justify-between text-sm">
+                    <span class="opacity-60">Status Akun</span>
+                    <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase rounded">Aktif</span>
+                </div>
+                <button onclick="handleLogout()" 
+                    class="w-full bg-white/10 hover:bg-red-500/20 hover:text-red-300 py-3 rounded-xl transition duration-300 border border-white/10 flex items-center justify-center gap-2 text-sm">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Keluar
+                </button>
+            </div>
         </div>
 
     </div>
 
     <script>
-        /**
-         * 1. DATABASE SETUP
-         * Menyimpan data user ke LocalStorage jika belum ada.
-         */
-        const usersData = [
-            { username: "magda", password: "123", name: "Magda" },
-            { username: "serlin", password: "123", name: "Serlin" },
-            { username: "martin", password: "123", name: "Martin" }
+        // 1. Database Sederhana dalam format JSON
+        const userDataJSON = [
+            { username: "admin1", password: "123", fullName: "Admin Satu" },
+            { username: "admin2", password: "123", fullName: "Admin Dua" },
+            { username: "admin3", password: "123", fullName: "Admin Tiga" }
         ];
 
-        function initDatabase() {
-            // Simpan data user dalam format JSON string
-            if (!localStorage.getItem('usersDB')) {
-                localStorage.setItem('usersDB', JSON.stringify(usersData));
-                console.log("Database diinisialisasi ke LocalStorage.");
+        // 2. Inisialisasi Database ke LocalStorage
+        function initDB() {
+            if (!localStorage.getItem('app_users')) {
+                localStorage.setItem('app_users', JSON.stringify(userDataJSON));
+                console.log("Database initialized.");
             }
         }
 
-        /**
-         * 2. LOGIN LOGIC
-         */
+        // 3. Logika Login
         const loginForm = document.getElementById('loginForm');
-        const loginSection = document.getElementById('loginFormContainer');
-        const dashboardSection = document.getElementById('userDashboard');
-
-        loginForm.addEventListener('submit', function(e) {
+        
+        loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-
-            const userInp = document.getElementById('username').value.toLowerCase().trim();
+            
+            const userInp = document.getElementById('username').value.trim().toLowerCase();
             const passInp = document.getElementById('password').value;
 
-            // Ambil data dari LocalStorage dan parse kembali ke Array
-            const db = JSON.parse(localStorage.getItem('usersDB'));
+            // Ambil data dari LocalStorage
+            const users = JSON.parse(localStorage.getItem('app_users'));
+            
+            // Verifikasi
+            const validUser = users.find(u => u.username === userInp && u.password === passInp);
 
-            // Cari user
-            const foundUser = db.find(u => u.username === userInp && u.password === passInp);
-
-            if (foundUser) {
-                // Berhasil Login
-                showDashboard(foundUser.name);
+            if (validUser) {
+                showDashboard(validUser.fullName);
             } else {
-                // Gagal Login
-                alert("Gagal Login! Username atau Password salah.");
+                alert("❌ Gagal Login!\nUsername atau password salah.");
             }
         });
 
-        /**
-         * 3. UI NAVIGATION
-         */
+        // 4. Navigasi Halaman
         function showDashboard(name) {
-            loginSection.classList.add('hidden');
-            dashboardSection.classList.remove('hidden');
+            const loginBox = document.getElementById('loginSection');
+            const userBox = document.getElementById('userSection');
+
+            loginBox.classList.add('opacity-0', 'scale-90', 'hidden');
             
-            document.getElementById('userNameDisplay').innerText = name;
-            document.getElementById('initialAvatar').innerText = name.charAt(0);
+            userBox.classList.remove('hidden');
+            setTimeout(() => {
+                userBox.classList.remove('scale-95');
+                userBox.classList.add('scale-100');
+            }, 50);
+
+            document.getElementById('displayName').innerText = name;
+            document.getElementById('avatarInitial').innerText = name.charAt(0);
         }
 
-        function logout() {
-            dashboardSection.classList.add('hidden');
-            loginSection.classList.remove('hidden');
-            loginForm.reset();
+        function handleLogout() {
+            location.reload(); // Refresh halaman untuk reset state
         }
 
-        // Jalankan Inisialisasi saat halaman dimuat
-        initDatabase();
+        // 5. Fitur Toggle Password
+        function togglePass() {
+            const passInp = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passInp.type === 'password') {
+                passInp.type = 'text';
+                eyeIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                passInp.type = 'password';
+                eyeIcon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        // Jalankan sistem saat load
+        initDB();
+        lucide.createIcons();
     </script>
 </body>
 </html>
+      
