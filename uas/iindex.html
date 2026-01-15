@@ -77,9 +77,9 @@
             init() {
                 // Inisialisasi user default jika belum ada di LocalStorage
                 const users = [
-                    { username: "admin1", password: "123" },
-                    { username: "admin2", password: "123" },
-                    { username: "admin3", password: "123" }
+                    { username: "magda", password: "123" },
+                    { username: "eca", password: "123" },
+                    { username: "janet", password: "123" }
                 ];
                 if (!localStorage.getItem(this.dbName)) {
                     localStorage.setItem(this.dbName, JSON.stringify(users));
