@@ -3,81 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Login LocalStorage</title>
+    <title>Sistem Login Admin - OOP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --primary-color: #4a90e2;
-            --error-color: #e74c3c;
-            --bg-color: #f4f7f6;
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        h2 { text-align: center; color: #333; }
-
-        .form-group { margin-bottom: 1rem; }
-
-        label { display: block; margin-bottom: 0.5rem; color: #666; }
-
-        input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s;
-        }
-
-        button:hover { background-color: #357abd; }
-
-        #dashboard { display: none; text-align: center; }
-
-        .logout-btn {
-            background-color: var(--error-color);
-            margin-top: 1rem;
-        }
-
-        .welcome-msg { font-size: 1.5rem; color: var(--primary-color); font-weight: bold; }
     </style>
 </head>
-<body>
+<body class="bg-gradient-to-br from-slate-800 to-slate-900 min-h-screen flex items-center justify-center p-4">
 
-    <div class="container">
-        <div id="login-page">
-            <h2>Masuk ke Aplikasi</h2>
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Masukkan username" required>
+    <div id="app-container" class="w-full max-w-md">
+        
+        <div id="loginPage" class="glass rounded-3xl p-8 shadow-2xl transition-all duration-300">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-slate-800">Admin Login</h2>
+                <p class="text-slate-500 text-sm mt-2">Silakan masuk untuk mengakses profil</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Username</label>
+                    <input type="text" id="username" placeholder="admin1 / admin2 / admin3" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition">
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition">
+                </div>
+                <button type="submit" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-95">
+                    LOGIN
+                </button>
+            </form>
+        </div>
+
+        <div id="profilePage" class="hidden glass rounded-3xl p-10 shadow-2xl text-center">
+            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-800">Hai, <span id="displayUser" class="text-blue-600">User</span></h1>
+            <p class="text-slate-500 mt-2">Selamat datang di dashboard admin Anda.</p>
+            
+            <div class="mt-8 pt-8 border-t border-slate-100">
+                <button id="btnLogout" 
+                    class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-red-100 active:scale-95">
+                    LOGOUT
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /**
+         * CLASS: DATABASE
+         * Bertanggung jawab mengelola penyimpanan data di LocalStorage
+         */
+        class Database {
+            constructor() {
+                this.dbName = "app_users_db";
+                this.sessionKey = "isLoggedIn";
+                this.init();
+            }
+
+            init() {
+                // Inisialisasi user default jika belum ada di LocalStorage
+                const users = [
+                    { username: "admin1", password: "123" },
+                    { username: "admin2", password: "123" },
+                    { username: "admin3", password: "123" }
+                ];
+                if (!localStorage.getItem(this.dbName)) {
+                    localStorage.setItem(this.dbName, JSON.stringify(users));
+                }
+            }
+
+            getUsers() {
+                return JSON.parse(localStorage.getItem(this.dbName));
+            }
+
+            setSession(username) {
+                localStorage.setItem(this.sessionKey, username);
+            }
+
+            getSession() {
+                return localStorage.getItem(this.sessionKey);
+            }
+
+            clearSession() {
+                localStorage.removeItem(this.sessionKey);
+            }
+        }
+
+        /**
+         * CLASS: AUTH SYSTEM
+         * Mengelola logika Login, Logout, dan UX (UI Switching)
+         */
+        class AuthSystem {
+            constructor(database) {
+                this.db = database;
+                this.loginPage = document.getElementById('loginPage');
+                this.profilePage = document.getElementById('profilePage');
+                this.loginForm = document.getElementById('loginForm');
+                this.btnLogout = document.getElementById('btnLogout');
+                this.displayUser = document.getElementById('displayUser');
+                
+                this.checkStatus();
+                this.events();
+            }
+
+            // Method untuk memeriksa status login saat halaman dibuka
+            checkStatus() {
+                const activeUser = this.db.getSession();
+                if (activeUser) {
+                    this.showProfile(activeUser);
+                } else {
+                    this.showLogin();
+                }
+            }
+
+            // Method Event Listeners
+            events() {
+                this.loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleLogin();
+                });
+
+                this.btnLogout.addEventListener('click', () => {
+                    this.handleLogout();
+                });
+            }
+
+            // Method Handle Login
+            handleLogin() {
+                const userInp = document.getElementById('username').value;
+                const passInp = document.getElementById('password').value;
+                const users = this.db.getUsers();
+
+                const userFound = users.find(u => u.username === userInp && u.password === passInp);
+
+                if (userFound) {
+                    this.db.setSession(userFound.username);
+                    this.showProfile(userFound.username);
+                } else {
+                    alert(" Login Gagal! Username atau password salah.");
+                }
+            }
+
+            // Method Handle Logout
+            handleLogout() {
+                this.db.clearSession();
+                this.showLogin();
+                this.loginForm.reset();
+            }
+
+            // Method UX: Tampilkan Profil
+            showProfile(username) {
+                this.loginPage.classList.add('hidden');
+                this.profilePage.classList.remove('hidden');
+                this.displayUser.innerText = username;
+            }
+
+            // Method UX: Tampilkan Login Form
+            showLogin() {
+                this.profilePage.classList.add('hidden');
+                this.loginPage.classList.remove('hidden');
+            }
+        }
+
+        // INSTANSIASI OBJECT
+        const myDB = new Database();
+        const myApp = new AuthSystem(myDB);
+
+    </script>
+</body>
+</html>
